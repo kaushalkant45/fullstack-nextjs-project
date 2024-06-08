@@ -16,11 +16,14 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid or expired token" },
+        { status: 400 }
+      );
     }
     console.log(user);
 
-    user.isVerified = true;
+    user.isVarified = true;
     user.verifyToken = undefined;
     user.verifyTokenExpiry = undefined;
 
@@ -28,13 +31,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Email verified sucessfully",
+        message: "Email verified successfully",
         success: true,
       },
-      { status: 500 }
+      { status: 200 }
     );
-
-    //..
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

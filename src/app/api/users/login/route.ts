@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    console.log("user exist");
+    console.log("user exists");
 
     const validPassword = await bcryptjs.compare(password, user.password);
 
@@ -37,18 +37,22 @@ export async function POST(request: NextRequest) {
       email: user.email,
     };
 
-    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
+    const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
       expiresIn: "1d",
     });
 
     const response = NextResponse.json({
-      message: "Looged in success",
+      message: "Logged in successfully",
       success: true,
     });
 
     response.cookies.set("token", token, {
       httpOnly: true,
+      maxAge: 24 * 60 * 60, // 1 day in seconds
+      path: "/", // Ensure cookie is accessible throughout the site
     });
+
+    return response; // Ensure the response is returned
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

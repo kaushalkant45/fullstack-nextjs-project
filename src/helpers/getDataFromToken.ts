@@ -7,6 +7,6 @@ export const getDataFromToken = (request: NextRequest) => {
     const decodedToken: any = jwt.verify(token, process.env.TOKEN_SECRET!);
     return decodedToken.id;
   } catch (error: any) {
-    throw new error(error.message);
+    throw new Error(error.message);
   }
 };
